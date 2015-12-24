@@ -9,7 +9,7 @@ $( document ).ready(function() {
             success : function(text)
                 {
                     if(jQuery.parseJSON(text).add_name){
-                        showLobby(name);
+                        showLobby();
                     } else {
                         alert("Gebruikersnaam is al gekozen, kies een andere");
                     }
@@ -21,7 +21,7 @@ $( document ).ready(function() {
     }
     });
 
-    function showLobby(name){
+    function showLobby(){
         $("#content").text("Laden ...");
         var timerId1 = 0;
         var timerId2 = 0;
@@ -30,9 +30,8 @@ $( document ).ready(function() {
             success : function(text)
                 {
                     $("#content").html(jQuery.parseJSON(text).lobby);
-                    $("#users").append("".concat("<li>",name,"</li>"));
-                    timerId1 = setInterval(getNames(), 2000);
-                    getNames();
+                    setLobbyNames();
+                    timerId1 = setInterval(setLobbyNames, 2000);
                 }
         })
         .fail(function() {
@@ -58,12 +57,15 @@ $( document ).ready(function() {
         }, 2000);
     }
 
-    function getNames(){
+    function setLobbyNames(){
         $.ajax({
             url: "names",
             success : function(text)
                 {
-                    console.log(jQuery.parseJSON(text).names)
+                    $("#users").html("");
+                    jQuery.parseJSON(text).names.forEach(function(entry) {
+                        $("#users").append("".concat("<li>",entry,"</li>"));
+                    });
                 }
         })
         .fail(function() {
