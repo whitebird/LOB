@@ -41,13 +41,15 @@ def reset_database():
 
 global names
 names = set([])
+global started
+started = False
 
 @app.route('/')
 def home():
     return render_template("login.html")
 
-@app.route('/test', methods=['POST'])
-def test():
+@app.route('/add_name', methods=['POST'])
+def add_name():
     name = request.form['name'];
     response = {}
     if(name not in names):
@@ -58,6 +60,16 @@ def test():
 
     print names
     return json.dumps(response)
+
+@app.route('/start_game')
+def start_game():
+    global started
+    started = True
+    return "Starting game"
+
+@app.route('/check_game_status', methods=['POST'])
+def check_game_status():
+    return json.dumps({"started" : started})
 
 if __name__ == '__main__':
     app.debug = True
