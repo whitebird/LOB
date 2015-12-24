@@ -41,7 +41,7 @@ $( document ).ready(function() {
             url: "get_lobby_file",
             success : function(text)
                 {
-                    $("#content").html(jQuery.parseJSON(text).lobby);
+                    $("#content").html(jQuery.parseJSON(text).lobby_html);
                     setLobbyNames();
                     timerId1 = setInterval(setLobbyNames, REFRESH);
                 }
@@ -54,12 +54,20 @@ $( document ).ready(function() {
             console.log("Checking if game has started");
             $.ajax({
                 url: "check_game_status",
+                method: "POST",
+                data: {name: name},
                 success : function(text)
                     {
-                        if(jQuery.parseJSON(text).started){
+                        var json = jQuery.parseJSON(text);
+                        if(json.started){
                             console.log("started");
                             clearInterval(timerId1);
                             clearInterval(timerId2);
+                            $("#content").html(json.category_html);
+                            console.log(json.chooser);
+                            if(name.toUpperCase() == json.chooser.toUpperCase()) {
+                                console.log("you can choose");
+                            }
                         }
                     }
             })
