@@ -1,25 +1,35 @@
 $( document ).ready(function() {
-    $("#loginButton").click(function() {
-    var name = $("#usernameInput").val();
-    if(name){
-        $.ajax({
-            method: "POST",
-            url: "add_name",
-            data: {name: name},
-            success : function(text)
-                {
-                    if(jQuery.parseJSON(text).add_name){
-                        showLobby();
-                    } else {
-                        alert("Gebruikersnaam is al gekozen, kies een andere");
-                    }
-                }
-        })
-        .fail(function() {
-            error();
-          })
-    }
+    $('#usernameInput').keypress(function (e) {
+        if (e.which == 13) {
+            login();
+        }
     });
+
+    $("#loginButton").click(function() {
+        login();
+    });
+
+    function login(){
+        var name = $("#usernameInput").val();
+        if(name){
+            $.ajax({
+                method: "POST",
+                url: "add_name",
+                data: {name: name},
+                success : function(text)
+                    {
+                        if(jQuery.parseJSON(text).add_name){
+                            showLobby();
+                        } else {
+                            alert("Gebruikersnaam is al gekozen, kies een andere");
+                        }
+                    }
+            })
+            .fail(function() {
+                error();
+              })
+        }
+    }
 
     function showLobby(){
         $("#content").text("Laden ...");
