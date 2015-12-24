@@ -2,7 +2,8 @@ drop table if exists question;
 create table question (
   id integer primary key autoincrement,
   category text not null,
-  question text not null
+  question text not null,
+  answer text not null
 );
 
 drop table if exists fillers;
