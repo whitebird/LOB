@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, json
 from flask import Flask, request, session, g, redirect, url_for, \
     abort, render_template, flash
 from contextlib import closing
@@ -12,9 +12,7 @@ PASSWORD = 'CHANGEME'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-if __name__ == '__main__':
-    app.debug = True
-    app.run(host='0.0.0.0')
+
 
 def init_db():
     with closing(connect_db()) as db:
@@ -40,13 +38,27 @@ def reset_database():
     init_db()
     return 'Database has been reset!'
 
+
+global names
+names = set([])
+
 @app.route('/')
 def home():
-    return render_template("layout.html")
-    '''if not session.get('logged_in'):
-        abort(401)
-    g.db.execute('insert into entries (title, text) values (?, ?)',
-                 [request.form['title'], request.form['text']])
-    g.db.commit()
-    flash('New entry was successfully posted')
-    return redirect(url_for('show_entries'))'''
+    return render_template("login.html")
+
+@app.route('/test', methods=['POST'])
+def test():
+    name = request.form['name'];
+    response = {}
+    if(name not in names):
+        names.add(name)
+        response["add_name"] = True
+    else:
+        response["add_name"] = False
+
+    print names
+    return json.dumps(response)
+
+if __name__ == '__main__':
+    app.debug = True
+app.run(host='0.0.0.0')
