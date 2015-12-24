@@ -1,5 +1,6 @@
 $( document ).ready(function() {
     var REFRESH = 2000;
+    var name = "";
     $('#usernameInput').keypress(function (e) {
         if (e.which == 13) {
             login();
@@ -11,7 +12,7 @@ $( document ).ready(function() {
     });
 
     function login(){
-        var name = $("#usernameInput").val();
+        name = $("#usernameInput").val();
         if(name){
             $.ajax({
                 method: "POST",

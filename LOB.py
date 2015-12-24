@@ -1,4 +1,4 @@
-import sqlite3, json
+import sqlite3, json, random
 from flask import Flask, request, session, g, redirect, url_for, \
     abort, render_template, flash
 from contextlib import closing
@@ -41,9 +41,13 @@ def reset_database():
 
 
 global names
-names = []
 global started
+global roundnmb
+global chooser
+names = []
 started = False
+roundnmb = 1
+chooser = ""
 
 @app.route('/')
 def home():
@@ -79,6 +83,16 @@ def start_game():
 @app.route('/check_game_status')
 def check_game_status():
     return json.dumps({"started" : started})
+
+@app.route('/choose_category')
+def choose_category():
+    global users
+    global chooser
+    if(not chooser):
+        chooser = random.choice(users)
+        print "Chosing category: " + chooser
+        
+    return json.dumps({"chooser" : chooser})
 
 if __name__ == '__main__':
     app.debug = True
