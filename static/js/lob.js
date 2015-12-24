@@ -9,7 +9,7 @@ $( document ).ready(function() {
             success : function(text)
                 {
                     if(jQuery.parseJSON(text).add_name){
-                        showLobby();
+                        showLobby(name);
                     } else {
                         alert("Gebruikersnaam is al gekozen, kies een andere");
                     }
@@ -21,26 +21,54 @@ $( document ).ready(function() {
     }
     });
 
-    function showLobby(){
-        $("#content").text("Wachten op andere spelers");
-        var timerId = setInterval(function(){
+    function showLobby(name){
+        $("#content").text("Laden ...");
+        var timerId1 = 0;
+        var timerId2 = 0;
+        $.ajax({
+            url: "get_lobby_file",
+            success : function(text)
+                {
+                    $("#content").html(jQuery.parseJSON(text).lobby);
+                    $("#users").append("".concat("<li>",name,"</li>"));
+                    timerId1 = setInterval(getNames(), 2000);
+                    getNames();
+                }
+        })
+        .fail(function() {
+            error();
+        })
+
+        timerId2 = setInterval(function(){
             console.log("Checking if game has started");
             $.ajax({
-                method: "POST",
                 url: "check_game_status",
-                data: {name: name},
                 success : function(text)
                     {
                         if(jQuery.parseJSON(text).started){
                             console.log("started");
-                            clearInterval(timerId);
+                            clearInterval(timerId1);
+                            clearInterval(timerId2);
                         }
                     }
             })
             .fail(function() {
                 error();
-              })
+            })
         }, 2000);
+    }
+
+    function getNames(){
+        $.ajax({
+            url: "names",
+            success : function(text)
+                {
+                    console.log(jQuery.parseJSON(text).names)
+                }
+        })
+        .fail(function() {
+            error();
+        })
     }
 
     function error() {

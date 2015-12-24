@@ -40,7 +40,7 @@ def reset_database():
 
 
 global names
-names = set([])
+names = []
 global started
 started = False
 
@@ -53,7 +53,7 @@ def add_name():
     name = request.form['name'];
     response = {}
     if(name not in names):
-        names.add(name)
+        names.append(name)
         response["add_name"] = True
     else:
         response["add_name"] = False
@@ -61,13 +61,22 @@ def add_name():
     print names
     return json.dumps(response)
 
+@app.route('/get_lobby_file')
+def get_lobby_file():
+    return json.dumps({"lobby" : render_template("lobby.html")})
+
+@app.route('/names')
+def get_names():
+    global names
+    return json.dumps({"names" : names})
+
 @app.route('/start_game')
 def start_game():
     global started
-    started = True
+    started= True
     return "Starting game"
 
-@app.route('/check_game_status', methods=['POST'])
+@app.route('/check_game_status')
 def check_game_status():
     return json.dumps({"started" : started})
 
