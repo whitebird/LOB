@@ -57,8 +57,7 @@ def add_name():
         response["add_name"] = True
     else:
         response["add_name"] = False
-
-    print names
+    
     return json.dumps(response)
 
 @app.route('/get_lobby_file')

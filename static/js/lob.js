@@ -1,4 +1,5 @@
 $( document ).ready(function() {
+    var REFRESH = 2000;
     $('#usernameInput').keypress(function (e) {
         if (e.which == 13) {
             login();
@@ -41,7 +42,7 @@ $( document ).ready(function() {
                 {
                     $("#content").html(jQuery.parseJSON(text).lobby);
                     setLobbyNames();
-                    timerId1 = setInterval(setLobbyNames, 2000);
+                    timerId1 = setInterval(setLobbyNames, REFRESH);
                 }
         })
         .fail(function() {
@@ -64,7 +65,7 @@ $( document ).ready(function() {
             .fail(function() {
                 error();
             })
-        }, 2000);
+        }, REFRESH);
     }
 
     function setLobbyNames(){
