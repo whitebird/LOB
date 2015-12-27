@@ -1,4 +1,4 @@
-import sqlite3, json, random
+import sqlite3, json, random, socket
 from flask import Flask, request, session, g, redirect, url_for, \
     abort, render_template, flash
 from contextlib import closing
@@ -68,9 +68,20 @@ def test():
     return ""
 
 
+@app.route('/screen')
+def screen():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("google.com",80))
+        address = (s.getsockname()[0])
+        s.close()
+    except socket.gaierror as e:
+        address = None
+    return render_template("screen.html", address=address)
+
+
 @app.route('/')
 def home():
-    print random_category()
     return render_template("login.html")
 
 

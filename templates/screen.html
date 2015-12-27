@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LOB</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/theme.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div id="content">
+            <h1>Screen</h1>
+            <ul id="users">
+            </ul>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p id="addressText" class="text-muted">
+                {% if address %}
+                Connect at {{ address }}
+                {% else %}
+                Could not get ip-address automatically.
+                {% endif %}
+            </p>
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/jquery-1.11.3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/screen.js') }}"></script>
+</body>
+</html>
